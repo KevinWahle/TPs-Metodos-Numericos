@@ -159,10 +159,10 @@ def man2bin (man, manBits):
 
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
-#                             MAIN (TestBench)
+#                                TestBench DEF
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
-def test(numb):
+def operationTest(numb):
     
     IeeeNumb = binary16(numb)
     IeeeNumb2 = binary16(numb*2)
@@ -196,43 +196,48 @@ def test(numb):
     res = -IeeeNumb
     print('-a: ', '-', IeeeNumb.d , '=', res.d, '-> IEEE754: ', res.bits)
 
+def test():
+    # Numero positivo
+    operationTest(4.7)
+    print("\n\n")
 
-# Numero positivo
-test(4)
-print("\n\n")
+    # Numero negativo
+    operationTest(-3.14)
+    print("\n\n")
 
-# Numero negativo
-test(-4)
-print("\n\n")
+    # Numero subnormal
+    operationTest(3e-7)
+    print("\n\n")
 
-# Numero subnormal
-test(3e-7)
-print("\n\n")
+    # Numero subnormal negativo
+    operationTest(-3e-7)
+    print("\n\n")
 
-# Numero subnormal negativo
-test(-3e-7)
-print("\n\n")
+    # Numero muy cercano a cero -> 0
+    operationTest(-5e-10)
+    print("\n\n")
 
-# Numero muy cercano a cero -> 0
-test(-5e-10)
-print("\n\n")
+    # Numero mayor al mas grande -> inf
+    operationTest(999999999)
+    print("\n\n")
 
-# Numero mayor al mas grande -> inf
-test(999999999)
-print("\n\n")
+    # Numero menor al mas chico -> -inf
+    operationTest(-999999999)
+    print("\n\n")
 
-# Numero menor al mas chico -> -inf
-test(-999999999)
-print("\n\n")
+    # Infinito de float
+    operationTest(float('+inf'))
+    print("\n\n")
 
-# Infinito de float
-test(float('+inf'))
-print("\n\n")
+    # Infinito negativo de float
+    operationTest(float('-inf'))
+    print("\n\n")
 
-# Infinito negativo de float
-test(float('-inf'))
-print("\n\n")
+    # Not a number de float
+    operationTest(float('NaN'))
+    print("\n\n")
 
-# Not a number de float
-test(float('NaN'))
-print("\n\n")
+# ------------------------------------------------------------------------------
+# MAIN
+# ------------------------------------------------------------------------------
+test()
