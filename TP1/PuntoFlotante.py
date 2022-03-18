@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
-#  @file     +Nombre del archivo (ej: template.c)+
-#  @brief    +Descripcion del archivo+
-#  @author   +Nombre del autor (ej: Salvador Allende)+
+#  @file     +PuntoFlotante.py+
+#  @brief    +Implemente del punto flotante IEEE 754 de 16 bits+
+#  @author   +Grupo 4+
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
@@ -25,17 +25,22 @@ class binary16:
     def dec2bin(self):
         ne = 5  # Cantidad de Bits de Exponente
         nm = 10 # Cantidad de Bits de Mantisa
-        self.bits[0]= 1 if self.d < 0 else 0    # Guardo el signo
+        self.bits[0] = 1 if self.d < 0 else 0    # Guardo el signo
         moduloD = abs(self.d)
         sesgo = 2**(ne-1)-1 
-        
         expTotal = 0   
 
-        if moduloD < 2**(1-sesgo):   # Si el numero esta en [-epsilon,+epsilon], lo consideramos 0
+        # Si el numero esta en [-epsilon,+epsilon], lo consideramos 0
+        if moduloD < 2**(1-sesgo):  
             return [0]*(ne+nm+1)
         
-        if moduloD > (2-2**(-nm))*2**(2**ne-sesgo-2): # Si el numero es infinito
-            return self.bits[0] + [1]*ne + [0]*nm     #TODO: REVISAR PORQUE NO ANDA
+        # Si el numero es infinito
+        if moduloD > (2-2**(-nm))*2**(2**ne-sesgo-2):
+            self.bits[0] = 1 if self.d < 0 else 0    #TODO: No se porque lo tengo que repetir (Nico)  
+            for i in range(0, ne): 
+                self.bits[i+1] = 1  # Todo el exponente debe ser 1
+            return self.bits
+
 
         expTotal = math.floor(math.log2(moduloD))
         #TODO: que pasa si expTotal es menor a 2**(ne-1)
@@ -48,8 +53,11 @@ class binary16:
     def identity(self):
         return self.bits
 
+    # Multiplicación por -1
     def negative(self):
         return [1 if self.bits[0]==0 else 0] + self.bits[1:]
+
+    #TODO: SUMA, RESTA y ¿MULTIPLICACION +1?
 
 # ------------------------------------------------------------------------------
 # FUNCTION DEF
@@ -83,18 +91,20 @@ def man2bin (man, manBits):
 
     return manb
 
-def test(numb):
-    IeeeNumb = binary16(numb)
-    print('El número:', numb, '-> IEEE754: ', IeeeNumb.bits)
-    #print(IeeeNumb.bits)
-    #print(IeeeNumb.negative())
-
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 #                             MAIN (TestBench)
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
-test(-2.4)
+def test(numb):
+    IeeeNumb = binary16(numb)
+    print('El número:', numb, '-> IEEE754: ', IeeeNumb.bits)
+    #print(IeeeNumb.negative())
+
+while True:
+    print("Write a number:", end="")
+    var = input()
+    test(var)
 
 
 # ------------------------------------------------------------------------------
