@@ -236,9 +236,3 @@ print("\n\n")
 # Not a number de float
 test(float('NaN'))
 print("\n\n")
-
-# ------------------------------------------------------------------------------
-# Preguntas
-# ------------------------------------------------------------------------------
-    #Suma/Resta puede ser en decimal?
-    #Solo numeros normal o tambien subnormales?
