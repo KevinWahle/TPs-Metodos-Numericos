@@ -1,6 +1,6 @@
 # ------------------------------------------------------------------------------
 #  @file     +PuntoFlotante.py+
-#  @brief    +Implemente del punto flotante IEEE 754 de 16 bits+
+#  @brief    +Implementación del punto flotante IEEE 754 de 16 bits+
 #  @author   +Grupo 4+
 # ------------------------------------------------------------------------------
 
