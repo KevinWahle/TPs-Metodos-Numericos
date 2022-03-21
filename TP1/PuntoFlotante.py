@@ -12,17 +12,21 @@ import math
 # ------------------------------------------------------------------------------
 # CLASSES
 # ------------------------------------------------------------------------------
+ne = 5  # Cantidad de Bits de Exponente
+nm = 10 # Cantidad de Bits de Mantisa
+sesgo = 2**(ne-1)-1 
+
 class binary16:
     def __init__(self, number):
         self.d = 0
-        self.bits = [0]*16
+        self.bits = [0]*(1+ne+nm)
         self.dec2bin(number)  # Devuelve si el numero es un caso extremo y cual
         self.bin2dec()
 
     def dec2bin(self, number):
-        ne = 5  # Cantidad de Bits de Exponente
-        nm = 10 # Cantidad de Bits de Mantisa
-        sesgo = 2**(ne-1)-1 
+        # ne = 5  # Cantidad de Bits de Exponente
+        # nm = 10 # Cantidad de Bits de Mantisa
+        # sesgo = 2**(ne-1)-1 
         expTotal = 0 # Es a lo que se eleva el 2  
 
         # Si no es un caso extremo
@@ -51,19 +55,37 @@ class binary16:
             expTotal=1-sesgo                # Calculo el exponente (1 - sesgo)
             self.bits[1:6]=[0]*ne           # Coloco 0s en el exponente
             mantisa=(modulo/2**expTotal)    # Calculo la mantisa
+            type="Sub-Normal"
+
         # Si el número es Normal
         else:
             expTotal = math.floor(math.log2(modulo))    # Calculo el exponente total (e - sesgo)
             exp = expTotal + sesgo                      # Calculo el exponente (e)
-            self.bits[1:6]=exp2bin (exp, ne)            # Guardo el exponente en binario
+            self.bits[1:6]=entero2bin(exp, ne)            # Guardo el exponente en binario
             mantisa = (modulo/2**expTotal) - 1          # Calculo la mantisa
+            type="Normal"
 
-        self.bits[6:16]=man2bin (mantisa, nm)           # Guardo la mantisa en binario
+        self.bits[6:16]=frac2bin(mantisa, nm)           # Guardo la mantisa en binario
+        self.roundIEEE(number, type)                    # Redondeo el número
+
+        
+    def roundIEEE(self, number, type):
+        auxnum = IEEE2dec(self.bits, type) 
+        aux0b = self.bits[0:6]+entero2bin(entero2dec(self.bits[6:16])+1, nm)    # Calculo el número anterior
+        aux0 = IEEE2dec(aux0b, type)
+        aux1b = self.bits[0:6]+entero2bin(entero2dec(self.bits[6:16])-1, nm)    # Calculo el número siguente
+        aux1 = IEEE2dec(aux1b, type)
+        err = [abs(aux0-number), abs(auxnum-number), abs(aux1-number)]      # Calculo los errores
+        cercano = listMinIndex(err)                                         # Me quedo con el número que menor error tenga
+        if cercano == 0:
+            self.bits = aux0b
+        elif cercano == 2:
+            self.bits = aux1b
 
     def bin2dec(self):
-        ne = 5  # Cantidad de Bits de Exponente
-        nm = 10 # Cantidad de Bits de Mantisa
-        sesgo = 2**(ne-1)-1
+        # ne = 5  # Cantidad de Bits de Exponente
+        # nm = 10 # Cantidad de Bits de Mantisa
+        # sesgo = 2**(ne-1)-1
         
         # Caso infinito
         if self.bits[1:] == [1]*ne + [0]*nm:        
@@ -131,12 +153,12 @@ class binary16:
 # ------------------------------------------------------------------------------
 # FUNCTION DEF
 # ------------------------------------------------------------------------------
-def exp2bin (exp, expBits):     # Convierte un numero decimal en binario con potencias positivas
+def entero2bin (exp, expBits):     # Convierte un numero entero base 10 en binario con potencias positivas
     cont = 0
     expb=[]
 
     if exp > 2**expBits:        # Numero mayor de lo que puedo guardar
-        return [1, 1, 1, 1, 1]
+        return [1]*expBits      # Coloco 1s en el exponente
         
     while cont<expBits:
         expb = [exp%2] + expb   # Divido por 2 y me quedo con el resto
@@ -144,7 +166,13 @@ def exp2bin (exp, expBits):     # Convierte un numero decimal en binario con pot
         cont += 1
     return expb    
 
-def man2bin (man, manBits):     # Convierte un numero decimal en binario con potencias negativas
+def entero2dec(bits):           # Convierte un numero entero binario en decimal
+    sum=0
+    for i in range(len(bits)):
+        sum += bits[len(bits)-1-i] * 2**i
+    return sum
+
+def frac2bin (man, manBits):     # Convierte un numero decimal en binario con potencias negativas
     cont = 0
     manb=[]
       
@@ -159,6 +187,30 @@ def man2bin (man, manBits):     # Convierte un numero decimal en binario con pot
 
     return manb
 
+def frac2dec(bits):             # Convierte un numero racional codificado en binario a decimal
+    mant = 0
+    for i in range(-len(bits),0):
+        mant += bits[-i-1] * 2**i
+    return mant
+
+def IEEE2dec(bits, type=""):
+        mantis = frac2dec(bits[6:])
+        if type == "Sub-Normal":
+            return (-1)**bits[0]*mantis*2**(1-sesgo)        # Armo mi número en decimal
+
+        elif type == "Normal":                                       
+            expo = entero2dec(bits[1:6])
+            return (-1)**bits[0]*(1+mantis)*2**(expo-sesgo)     # Armo mi número decimal
+        
+        return 0
+
+def listMinIndex(list):      
+    min=0                  
+    for i in range(len(list)):  # Recorro toda la lista
+        if list[i]<list[min]:   # Si el elemento actual es menor al que tengo que comparar
+            min=i               # Actualizo el índice del valor del minimo
+    return min
+
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 #                                TestBench DEF
@@ -170,6 +222,7 @@ def operationTest(numb):
     res = binary16(0)               # Aquí se almacenará el resultado
 
     print('Numero inicial:', numb)
+    print('Numero guardado:', IeeeNumb.d)
 
     print("SUMA")
     res = IeeeNumb + IeeeNumb2
