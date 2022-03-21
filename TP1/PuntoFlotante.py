@@ -8,7 +8,7 @@
 # LIBRARIES
 # ------------------------------------------------------------------------------
 import math
-
+import numpy as np
 # ------------------------------------------------------------------------------
 # CLASSES
 # ------------------------------------------------------------------------------
@@ -250,46 +250,63 @@ def operationTest(numb):
     res = -IeeeNumb
     print('-a: ', '-', IeeeNumb.d , '=', res.d, '-> IEEE754: ', res.bits)
 
+    return 1 if (IeeeNumb.d==np.float16(numb) and IeeeNumb2.d==np.float16(numb*2)) else 0
+
 def test():
+    passCases=0 #Casos que se pasaron
+    totalCases=0
+
+
     # Numero positivo
-    operationTest(4.7)
+    passCases+=operationTest(4.7)
+    totalCases+=1
     print("\n")
 
     # Numero negativo
-    operationTest(-3.14)
+    passCases+=operationTest(-3.14)
+    totalCases+=1
     print("\n")
 
     # Numero subnormal
-    operationTest(3e-7)
+    passCases+=operationTest(3e-7)
+    totalCases+=1
     print("\n")
 
     # Numero subnormal negativo
-    operationTest(-3e-7)
+    passCases+=operationTest(-3e-7)
+    totalCases+=1
     print("\n")
 
     # Numero muy cercano a cero -> 0
-    operationTest(-5e-10)
+    passCases+=operationTest(-5e-10)
+    totalCases+=1
     print("\n")
 
     # Numero mayor al mas grande -> inf
-    operationTest(999999999)
+    passCases+=operationTest(999999999)
+    totalCases+=1
     print("\n")
 
     # Numero menor al mas chico -> -inf
-    operationTest(-999999999)
+    passCases+=operationTest(-999999999)
+    totalCases+=1
     print("\n")
 
     # Infinito de float
-    operationTest(float('+inf'))
+    passCases+=operationTest(float('+inf'))
+    totalCases+=1
     print("\n")
 
     # Infinito negativo de float
-    operationTest(float('-inf'))
+    passCases+=operationTest(float('-inf'))
+    totalCases+=1
     print("\n")
 
     # Not a Number de float
     operationTest(float('NaN'))
     print("\n")
+
+    print ('Las pruebas pasadas con éxito fueron', passCases, '/', totalCases)
 
 # ------------------------------------------------------------------------------
 # MAIN
