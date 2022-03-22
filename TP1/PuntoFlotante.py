@@ -59,7 +59,7 @@ class binary16:
 
         # Si el número es Normal
         else:
-            expTotal = math.floor(math.log2(modulo))    # Calculo el exponente total (e - sesgo)
+            expTotal = math.floor(log2(modulo))    # Calculo el exponente total (e - sesgo)
             exp = expTotal + sesgo                      # Calculo el exponente (e)
             self.bits[1:6]=entero2bin(exp, ne)            # Guardo el exponente en binario
             mantisa = (modulo/2**expTotal) - 1          # Calculo la mantisa
@@ -211,6 +211,13 @@ def listMinIndex(list):
             min=i               # Actualizo el índice del valor del minimo
     return min
 
+def ln(x):
+    n = 1e15
+    return n * ((x ** (1/n)) - 1)
+
+def log2(x):
+    return ln(x)/ln(2)
+
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 #                                TestBench DEF
@@ -256,9 +263,8 @@ def test():
     passCases=0 #Casos que se pasaron
     totalCases=0
 
-
     # Numero positivo
-    passCases+=operationTest(4.7)
+    passCases+=operationTest(4.2)
     totalCases+=1
     print("\n")
 
