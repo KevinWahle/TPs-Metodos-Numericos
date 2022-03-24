@@ -3,5 +3,5 @@ En este repositorio se encuentran todos los trabajos prácticos de la Materia M�
 
 
 ## TP1
-Conversor de número punto flotante de doble precisión (64 bits) a un número IEEE-754 de 16bits. Programado en el lenguaje Python.
+Conversor de número punto flotante de doble precisión (64 bits) a un número IEEE-754 de 16bits. Programado en el lenguaje Python.  
 A su vez tiene un testbench para comprobar las conversiones de diferentes números.
