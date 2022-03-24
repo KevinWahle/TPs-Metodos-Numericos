@@ -153,7 +153,7 @@ class binary16:
 # ------------------------------------------------------------------------------
 # FUNCTION DEF
 # ------------------------------------------------------------------------------
-def entero2bin (exp, expBits):     # Convierte un numero entero base 10 en binario con potencias positivas
+def entero2bin(exp, expBits):     # Convierte un numero entero base 10 en binario con potencias positivas
     cont = 0
     expb=[]
 
