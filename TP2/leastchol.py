@@ -143,5 +143,3 @@ def sonido():
     plt.tight_layout()
     plt.legend()
     plt.show()
-
-sonido()
