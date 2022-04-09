@@ -103,13 +103,9 @@ def test(A, b):
     X = leastsq(A, b)
     print(X)
 
-    # Método 1 para resolución de sistemas de ecuaciones
-    X2 = np.linalg.solve(At@A, At@b)
+    # Método de numpy para resolución de sistemas de ecuaciones
+    X2 = np.linalg.lstsq(A, b, rcond=None)[0]
     print(X2)
-
-    # Método 2 para resolución de sistemas de ecuaciones
-    X3 = np.linalg.lstsq(A, b, rcond=None)[0]
-    print(X3)
 
 
 A = np.array([[-1,-1],[1,0]])
