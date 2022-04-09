@@ -118,7 +118,7 @@ b = np.array([1,2])
 # ------------------------------------------------------------------------------
 def sonido():
     #Cargamos y mostramos los datos del TP
-    df  = pd.read_csv('TP2/sound.txt',header=None,names=['ti','yi'],dtype={'ti':np.float64,'yi':np.float64},sep=' ')
+    df  = pd.read_csv('sound.txt',header=None,names=['ti','yi'],dtype={'ti':np.float64,'yi':np.float64},sep=' ')
 
     ti  = np.array(df['ti'].tolist())
     yi  = np.array(df['yi'].tolist())
@@ -128,7 +128,7 @@ def sonido():
     At = np.transpose(A)
     b = np.asarray(yi)
 
-    Xvect = leastsq(At, b)
+    Xvect = leastsq(At, b)  # Se carga la transpuesta de A y se resuelve el sistema de ecuaciones
 
     ycalc= At@Xvect #Calculamos los valores de y a partir de las contantes calculadas
 
@@ -142,6 +142,6 @@ def sonido():
     plt.get_current_fig_manager().window.showMaximized()
     plt.tight_layout()
     plt.legend()
-    #plt.show()
+    plt.show()
 
 sonido()
