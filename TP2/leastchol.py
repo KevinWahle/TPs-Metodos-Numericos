@@ -22,7 +22,7 @@ def leastsq(A, b):
 
     At = transpuesta(A, N, Nc)
     
-    if (autovalores(At@A).min() < 0 or not esSimetrica(At@A, Nc)):
+    if (autovalores(At@A).min() <= 0 or not esSimetrica(At@A, Nc)):
         print("La matriz no es definida positiva")
         return None
 
@@ -96,21 +96,62 @@ def esSimetrica(mat, N):
 # ------------------------------------------------------------------------------
 # TEST    
 # ------------------------------------------------------------------------------
-def test(A, b):
+def comp(A, b):
     At = transpuesta(A, len(A), len(A[0]))
-
+    print("\n")
     # Método del grupo 4 para resolución de sistemas de ecuaciones
     X = leastsq(A, b)
-    print(X)
+    print("Resultado calculado: ",X)
 
     # Método de numpy para resolución de sistemas de ecuaciones
-    X2 = np.linalg.lstsq(A, b, rcond=None)[0]
-    print(X2)
+    X1= np.linalg.lstsq(A, b, rcond=None)[0]
+    print("Resultado de linalg: ", X1)
+    
+    if (X is None): # Si no es definida positiva 
+        return 1
+
+    if np.allclose(X, X1):      # Comparamos las dos matrices 
+        print("Prueba exitosa")
+        return 1
+    else:
+        print("Prueba fallida")
+        return 0
 
 
-A = np.array([[-1,-1],[1,0]])
-b = np.array([1,2])
-#test(A, b)
+def test():
+    pOk=0; ptotales=0
+    
+    A = np.array([[-1,-1],[1,0]])
+    b = np.zeros((2,1)); b=[0,1]
+    pOk += comp(A, b)
+    ptotales+=1
+
+    A = np.array([[2,-1],[-1,2]])
+    b = np.zeros((2,1)); b=[3,8]
+    pOk += comp(A, b)
+    ptotales+=1
+
+    A = np.array([[0,1],[0,1]]) 
+    b = np.zeros((2,1)); b=[0,0]
+    pOk += comp(A, b)
+    ptotales+=1
+
+    A = np.array([[0,-0.45],[10000,0]])
+    b = np.zeros((2,1)); b=[0.003,-87]
+    pOk += comp(A, b)
+    ptotales+=1
+
+    A = np.array([[2, -1, 0],[-1, 2, -1],[0, -1, 2]])
+    b = np.zeros((3,1)); b=[1,2,3]
+    pOk += comp(A, b)
+    ptotales+=1
+
+    A = np.array([[-8, 1.1, 0],[-1, 3, 1],[0, 7, 5]])
+    b = np.zeros((3,1)); b=[15,8,3.2]
+    pOk += comp(A, b)
+    ptotales+=1
+
+    print(f"Se superaron: {pOk} de {ptotales} pruebas totales")
 
 
 # ------------------------------------------------------------------------------
