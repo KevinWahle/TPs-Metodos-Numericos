@@ -108,7 +108,7 @@ def comp(A, b):
     print("Resultado de linalg: ", X1)
     
     if (X is None): # Si no es definida positiva 
-        return 1
+        return 1    # No se puede resolver por Cholesky
 
     if np.allclose(X, X1):      # Comparamos las dos matrices 
         print("Prueba exitosa")
@@ -121,7 +121,7 @@ def comp(A, b):
 def test():
     pOk=0; ptotales=0
     
-    A = np.array([[-1,-1],[1,0]])
+    A = np.array([[-1,-1],[1,0]])   
     b = np.zeros((2,1)); b=[0,1]
     pOk += comp(A, b)
     ptotales+=1
@@ -131,9 +131,9 @@ def test():
     pOk += comp(A, b)
     ptotales+=1
 
-    A = np.array([[0,1],[0,1]]) 
+    A = np.array([[0,1],[0,1]])     # Matriz no definida positiva 
     b = np.zeros((2,1)); b=[0,0]
-    pOk += comp(A, b)
+    pOk += comp(A, b)               
     ptotales+=1
 
     A = np.array([[0,-0.45],[10000,0]])
@@ -173,14 +173,14 @@ def sonido():
 
     ycalc= At@Xvect #Calculamos los valores de y a partir de las contantes calculadas
 
-    #error = np.linalg.norm(yi-ycalc)
-    error = np.sqrt(np.square(np.subtract(yi, ycalc)).sum())
-    print("Error: ", error)
-    
-    # Graficamos los datos para ver la similitud
+    error = np.subtract(yi, ycalc) #Calculamos el error
+
+    #Graficamos los datos para ver la similitud
     plt.plot(ti,yi, label="Teórica")
     plt.plot(ti, ycalc, label="Aproximada")
     plt.get_current_fig_manager().window.showMaximized()
     plt.tight_layout()
     plt.legend()
     plt.show()
+
+    return Xvect, error
