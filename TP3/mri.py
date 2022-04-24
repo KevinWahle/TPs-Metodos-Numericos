@@ -25,7 +25,7 @@ def solver(L,l,n):
 
     return r
 
-def graphRL():
+def graphRvL():
     l = 0.2 # Longitud del solenoide en metros
     L = np.linspace(1e-9,100e-9,1000) # Inductancia del solenoide H
     N1 = 10
@@ -44,3 +44,8 @@ def graphRL():
     plt.title('Radio vs Inductancia')
     plt.legend()
     plt.show()
+
+
+
+# LATEX
+# https://es.overleaf.com/9595175413frjjtbtcczfv
