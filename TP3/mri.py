@@ -37,11 +37,13 @@ def solver(L,l,n):
     
     return ro, iters
 
+
 def graphRvL():
     C = 10000                       # Cantidad de puntos a tomar
     l = 0.2                         # Longitud del solenoide en metros
     L = np.linspace(1e-9,100e-6,C)  # Inductancia del solenoide H
     N = [10, 100, 1000]             # Cant de vueltas
+
     #Inicialización de arreglos
     r1 = np.zeros(C); r2 = np.zeros(C); r3 = np.zeros(C)    
 
@@ -69,6 +71,7 @@ def graphRvL():
     figManager.window.showMaximized()
     plt.show()
 
+
 def test():
     tol = 1e-9              # Tolerancia aceptada
     mu = 4 * np.pi * 10**(-7)   # Permeabilidad del vacío
@@ -93,7 +96,3 @@ def test():
                 result = result + 1 if abs(L_ - Lcalc(r,l_,n_)) < tol else result   
     
     print('Se pasaron con éxito', result, '/', tot, 'casos')
-
-            
-#test()
-graphRvL()
