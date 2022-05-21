@@ -7,6 +7,7 @@
 # ------------------------------------------------------------------------------
 # LIBRARIES
 # ------------------------------------------------------------------------------
+from turtle import color
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -77,30 +78,32 @@ def hodgkinhuxley():
     return t,x
 
 def test():
-    x0=np.array([0])
     t0=0; tf=10; h=0.01
 
-    testfun=np.zeros(1)
-    f = lambda t: t**2
-    sol = lambda t: t**3
-    testfun=np.append(testfun, [f, f])
+    #Funciones de prueba
+    df1 = lambda t,x: t**2
+    f1 = lambda t,x: t**3/3
+    x1=np.array([f1(t0,0)])
 
-    f = lambda t: np.sin(t)
-    sol = lambda t: np.cos(t)
-    testfun=np.append(testfun, [f, f])
+    df2 = lambda t,x: np.sin(t)
+    f2 = lambda t,x: -np.cos(t)
+    x2=np.array([f2(t0,0)])
 
-    f = lambda t: mt.log(t, np.e)
-    sol = lambda t: 1/t
-    testfun=np.append(testfun, [f, f])
+    df3 = lambda t,x: 1/(t+1) 
+    f3 = lambda t,x: np.log(t+1)
+    x3=np.array([f3(t0,0)])
 
-    f = lambda t: np.e**t
-    testfun=np.append(testfun, [f, f]) # La integral de la exponencial es ella misma
+    df4 = lambda t,x: np.e**t
+    x4=np.array([df4(t0,0)])
     
-    for func, sol in testfun:
-        t_rk, x_rk = ruku4(f=func, t0=t0, tf=tf, x0=x0)
-        plt.plot(t_rk, x_rk, label="RK-4")
-        x = sol(t_rk)
-        plt.plot(t,x, label="solución")
+    testfun = np.array([[df1,f1,x1],[df2,f2,x2],[df3,f3,x3],[df4,df4,x4]])
+
+    for func, sol, x0 in testfun:   # Bucle de prueba
+        t_rk, x_rk = ruku4(f=func, t0=t0, tf=tf, x0=x0, h=h)
+        t = np.linspace(t0, tf, int((tf-t0)/h)+1)
+        x = sol(t_rk,0)
+        plt.plot(t,x, label="solución",color="blue")
+        plt.plot(t_rk, x_rk, linestyle='dashed', label="RK-4", color="red")
         plt.legend()
         plt.show()
 
