@@ -83,18 +83,18 @@ def test():
     testfun=np.zeros(1)
     f = lambda t: t**2
     sol = lambda t: t**3
-    testfun.append([f, sol])
+    testfun=np.append(testfun, [f, f])
 
     f = lambda t: np.sin(t)
     sol = lambda t: np.cos(t)
-    testfun.append([f, sol])
+    testfun=np.append(testfun, [f, f])
 
     f = lambda t: mt.log(t, np.e)
     sol = lambda t: 1/t
-    testfun.append([f, sol])
+    testfun=np.append(testfun, [f, f])
 
     f = lambda t: np.e**t
-    testfun.append([f, f]) # La integral de la exponencial es ella misma
+    testfun=np.append(testfun, [f, f]) # La integral de la exponencial es ella misma
     
     for func, sol in testfun:
         t_rk, x_rk = ruku4(f=func, t0=t0, tf=tf, x0=x0)
@@ -104,5 +104,4 @@ def test():
         plt.legend()
         plt.show()
 
-
-t,x=hodgkinhuxley()
+test()
