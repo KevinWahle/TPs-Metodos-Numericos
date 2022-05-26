@@ -106,5 +106,3 @@ def test():
         plt.plot(t_rk, x_rk, linestyle='dashed', label="RK-4", color="red")
         plt.legend()
         plt.show()
-
-test()
