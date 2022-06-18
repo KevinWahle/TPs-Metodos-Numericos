@@ -48,7 +48,7 @@ def minimi(f, Df, x0, tol, maxiter):
                 #sigue "bajando"
                 if fc > fb:
                     c, fc  = b, fb
-                    b *= 2  ####################################################################################################################Proba divisir por 2
+                    b *= 2
                     fb = f(x+b*H)
                 else:
                     break
@@ -65,12 +65,12 @@ def minimi(f, Df, x0, tol, maxiter):
                     break
                 b = np.random.rand(1)
                 c /= 2  ##############################################################################################################################Aca falta un b
+        
         # Si después de muchas iteraciones, no llegamos a nada, devuelvo algo al azar entre 0 y 1.
         if alfa == 50 :
             #print("No se encontró una solución")
             alfa = np.random.rand(1)
         else:
-
             alfa_min = c*((4*fc-fb-3*fa)/(4*fc-2*fb-2*fa))
 
         x_n = x + alfa_min*H
@@ -159,8 +159,6 @@ def test():
     print("ECM: ", np.sum(np.power(error,2))/len(error))
     print("Error Maximo", np.max(np.abs(error)))
     print("Error Relativo medio: ", (np.sum(abs(error/y))/len(error))*100, "%")
-
-    x[1]=1
 
     temp = lambda t: (x[0]+x[1]*np.cos(2*np.pi*t/x[3])+x[2]*np.cos(2*np.pi*t/x[4]))
 
