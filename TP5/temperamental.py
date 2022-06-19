@@ -56,7 +56,7 @@ def minimi(f, Df, x0, tol, maxiter):
                 c  /= 2
                 fc = f(x+c*g)
             
-            #si el intervalo es demasiado chico o demasiado grande, comencemos nuevamente...
+            #si el intervalo es demasiado chico o demasiado grande, comencemos nuevamente
             if (b < 1e-6) or (b > 1e6) :
                 k = k + 1
                 if k == 100 :
