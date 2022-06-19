@@ -64,7 +64,7 @@ def minimi(f, Df, x0, tol, maxiter):
                 b = np.random.rand(1)
                 c /= 2
         
-        # Si después de muchas iteraciones, no llegamos a nada, devuelvo algo al azar entre 0 y 1.
+        # Si después de muchas iteraciones, no llegamos a nada, x_n = x
         if k == 100 :
             x_n = x
         else:
@@ -129,10 +129,20 @@ def test():
     x0esf=np.array([-47.5,20,-12.6])
     x1=minimi(esfera, gradesfera, x0esf, tol, max_it)
     print("El mínimo real es: [0,0,0] mientras que el mínimo calculado por minimi con x0=", x0esf, "es: ", x1)
-    print("\nLa norma de la diferencia entre el mínimo real y el cálculado es: ", np.linalg.norm(np.zeros(3)-x1))
-        
+    x0esf=np.array([-47,5,0])
+    x1=minimi(esfera, gradesfera, x0esf, tol, max_it)
+    print("El mínimo real es: [0,0,0] mientras que el mínimo calculado por minimi con x0=", x0esf, "es: ", x1)
+    x0esf=np.array([-1,-5,-60])
+    x1=minimi(esfera, gradesfera, x0esf, tol, max_it)
+    print("El mínimo real es: [0,0,0] mientras que el mínimo calculado por minimi con x0=", x0esf, "es: ", x1)
+    x0esf=np.array([1,1,1])
+    x1=minimi(esfera, gradesfera, x0esf, tol, max_it)
+    print("El mínimo real es: [0,0,0] mientras que el mínimo calculado por minimi con x0=", x0esf, "es: ", x1)
+
     print("\n\n")
     
     print("Evaluación de la funcion de temperatura: \n")
     temp_test()
     return
+
+test()
