@@ -62,7 +62,7 @@ def minimi(f, Df, x0, tol, maxiter):
                 alfa = alfa + 1
                 if alfa == 100 :
                     break
-                b = np.random.rand(4)
+                b = np.random.rand(1)
                 c /= 2
         
         # Si después de muchas iteraciones, no llegamos a nada, devuelvo algo al azar entre 0 y 1.
@@ -142,7 +142,7 @@ def grad(coef):
 
 def temperatura():
     xo=np.array([36.16,0.1,1.0,24.00,24.00])
-    tol=1e-15; max_it=1000
+    tol=1e-16; max_it=10000
     x = minimi(f, grad, xo, tol, max_it)
     error = f_aux(x) # Error local
     return x, error    
@@ -157,7 +157,7 @@ def test():
     x, error=temperatura()
     print("Coef obtenidos ([a,b,c,T1,T2]): \n", x)
     print("ECM: ", np.sum(np.power(error,2))/len(error))
-    print("Error Maximo", np.max(np.abs(error)))
+    print("Error Maximo", np.max(np.abs(error)), "ºC")
     print("Error Relativo medio: ", (np.sum(abs(error/y))/len(error))*100, "%")
 
     temp = lambda t: (x[0]+x[1]*np.cos(2*np.pi*t/x[3])+x[2]*np.cos(2*np.pi*t/x[4]))
