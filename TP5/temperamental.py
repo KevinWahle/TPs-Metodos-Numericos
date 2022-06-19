@@ -12,11 +12,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import math as mt
-import sklearn.metrics as skl
+#import sklearn.metrics as skl
 # ------------------------------------------------------------------------------
 # FUNCTION DEF
 # ------------------------------------------------------------------------------
-
 data = np.loadtxt("temp.txt") 
 t=data[:,0]; y=data[:,1]
 
@@ -26,7 +25,7 @@ def minimi(f, Df, x0, tol, maxiter):
     g = -Df(x) # Gradiente
 
     # Evaluo primero si el gradiente es menor a la tolerancia
-    if(np.linalg.norm(g)<tol):
+    if(np.linalg.norm(g)==0):
         print("X0 es un mínimo")
         return x
     
@@ -61,21 +60,22 @@ def minimi(f, Df, x0, tol, maxiter):
             #si el intervalo es demasiado chico o demasiado grande, comencemos nuevamente...
             if (b < 1e-6) or (b > 1e6) :
                 alfa = alfa + 1
-                if alfa == 50 :
+                if alfa == 100 :
                     break
-                b = np.random.rand(1)
-                c /= 2  ##############################################################################################################################Aca falta un b
+                b = np.random.rand(4)
+                c /= 2
         
         # Si después de muchas iteraciones, no llegamos a nada, devuelvo algo al azar entre 0 y 1.
-        if alfa == 50 :
-            #print("No se encontró una solución")
-            alfa = np.random.rand(1)
+        if alfa == 100 :
+            alfa_min = np.random.rand(1)
         else:
             alfa_min = c*((4*fc-fb-3*fa)/(4*fc-2*fb-2*fa))
-
+        
         x_n = x + alfa_min*H
+        if(np.linalg.norm(x_n-x)<tol):
+            print("Se encontró~ una solución")
+            break
         x = x_n
-
     return x
 
 # def minimi(funcion, gradiente, x0, tol, max_it): 
@@ -141,7 +141,7 @@ def grad(coef):
     return df
 
 def temperatura():
-    xo=np.array([36.0,1.0,1.0,24.0,7*24.0])
+    xo=np.array([36.16,0.1,1.0,24.00,24.00])
     tol=1e-15; max_it=1000
     x = minimi(f, grad, xo, tol, max_it)
     error = f_aux(x) # Error local
@@ -151,7 +151,7 @@ def temperatura():
 # TEST
 # ------------------------------------------------------------------------------
 def test():
-    tol=1e-15; max_it=1000
+    #tol=1e-15; max_it=1000 ESTAN AL PEDO
     
     #Evaluamos la función temperatura
     x, error=temperatura()
