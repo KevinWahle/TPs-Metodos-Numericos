@@ -141,8 +141,8 @@ def grad(coef):
     return df
 
 def temperatura():
-    xo=np.array([36.16,0.1,1.0,24.00,24.00])
-    tol=1e-16; max_it=10000
+    xo=np.array([36.16,-0.6,1.0,24.00,24.00])
+    tol=1e-15; max_it=10000
     x = minimi(f, grad, xo, tol, max_it)
     error = f_aux(x) # Error local
     return x, error    
@@ -150,7 +150,7 @@ def temperatura():
 # ------------------------------------------------------------------------------
 # TEST
 # ------------------------------------------------------------------------------
-def test():
+def temp_test():
     #tol=1e-15; max_it=1000 ESTAN AL PEDO
     
     #Evaluamos la función temperatura
@@ -161,6 +161,7 @@ def test():
     print("Error Relativo medio: ", (np.sum(abs(error/y))/len(error))*100, "%")
 
     temp = lambda t: (x[0]+x[1]*np.cos(2*np.pi*t/x[3])+x[2]*np.cos(2*np.pi*t/x[4]))
+    #temp = lambda t: (36.16230263+0.24203703*np.cos(2*np.pi*t/23.99802585)+0.17812332*np.cos(2*np.pi*t/23.98588076))
 
     plt.plot(t, y, 'b', label='Datos')
     plt.plot(t, temp(t), 'r', label='Modelo')
@@ -169,4 +170,5 @@ def test():
     plt.show()
     return 0
 
-test()
+
+temp_test()
