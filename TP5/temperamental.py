@@ -7,12 +7,11 @@
 # ------------------------------------------------------------------------------
 # LIBRARIES
 # ------------------------------------------------------------------------------
-from tkinter import Y
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import math as mt
-#import sklearn.metrics as skl
+
 # ------------------------------------------------------------------------------
 # FUNCTION DEF
 # ------------------------------------------------------------------------------
@@ -71,59 +70,11 @@ def minimi(f, Df, x0, tol, maxiter):
         else:
             alfa_min = c*((4*fc-fb-3*fa)/(4*fc-2*fb-2*fa))
         
-        x_n = x + alfa_min*H
+        x_n = x + alfa_min*g
         if(np.linalg.norm(x_n-x)<tol):
-            print("Se encontró~ una solución")
             break
         x = x_n
     return x
-
-# def minimi(funcion, gradiente, x0, tol, max_it): 
-#     x=x0 
-#     d=-gradiente(x) 
-#     if(np.linalg.norm(d)==0): 
-#         print("x0 es min") 
-#         return x 
-#         #Determinamos alfa_min para cada paso de iteracion usando interpolacion cuadratica
-#     for i in range(max_it):
-#     #Definimos un alfa_0 experimentalmente
-#         alfa=1
-#         h=alfa*d
-#         f_a=funcion(x)
-#         f_b=funcion(x+h)
-#         f_c=funcion(x+2*h)
-#         for j in range(1000):
-#             if((f_b<f_a) and (f_b<f_c)):
-#                 break
-#             elif((f_a>f_b) and (f_b>f_c)):
-#                 alfa=2*alfa
-#                 f_b=f_c
-#                 f_c=funcion(x+alfa*2*d)
-#             elif((f_a<f_b) and (f_b<f_c)):
-#                 alfa=alfa/2
-#                 f_c=f_b
-#                 f_b=funcion(x+alfa*d)
-#             elif(f_a==f_b):
-#                 alfa=alfa/2
-#                 f_c=f_b
-#                 f_b=funcion(x+alfa*d)
-#                 break
-#             elif(f_b==f_c):
-#                 alfa=3*alfa/2
-#                 f_a=f_b
-#                 f_b=funcion(x+alfa*d)
-#                 break
-#         if (f_a==f_c):
-#             alfa_min=alfa
-#         elif(((f_a<f_b) or (f_b>f_c)) and j==999):
-#             break
-#         else:
-#             alfa_min=alfa*(4*f_b-3*f_a-f_c)/(4*f_b-2*f_a-2*f_c)
-#         x_n=x+alfa_min*d
-#         if(np.linalg.norm(x_n-x)<tol):
-#             break
-#         x=x_n
-#     return x
 
 f_aux= lambda x: y - (x[0]+x[1]*np.cos(2*np.pi*t/x[3])+x[2]*np.cos(2*np.pi*t/x[4]))
 f = lambda x: np.sum(np.square(f_aux(x)))/len(f_aux(x))
@@ -150,18 +101,15 @@ def temperatura():
 # ------------------------------------------------------------------------------
 # TEST
 # ------------------------------------------------------------------------------
-def temp_test():
-    #tol=1e-15; max_it=1000 ESTAN AL PEDO
-    
+def test():
     #Evaluamos la función temperatura
     x, error=temperatura()
     print("Coef obtenidos ([a,b,c,T1,T2]): \n", x)
     print("ECM: ", np.sum(np.power(error,2))/len(error))
-    print("Error Maximo", np.max(np.abs(error)), "ºC")
+    print("Error Máximo", np.max(np.abs(error)), "ºC")
     print("Error Relativo medio: ", (np.sum(abs(error/y))/len(error))*100, "%")
 
     temp = lambda t: (x[0]+x[1]*np.cos(2*np.pi*t/x[3])+x[2]*np.cos(2*np.pi*t/x[4]))
-    #temp = lambda t: (36.16230263+0.24203703*np.cos(2*np.pi*t/23.99802585)+0.17812332*np.cos(2*np.pi*t/23.98588076))
 
     plt.plot(t, y, 'b', label='Datos')
     plt.plot(t, temp(t), 'r', label='Modelo')
@@ -169,6 +117,3 @@ def temp_test():
     plt.legend()
     plt.show()
     return 0
-
-
-temp_test()
