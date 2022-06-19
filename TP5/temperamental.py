@@ -30,47 +30,47 @@ def minimi(f, Df, x0, tol, maxiter):
     
     # Determinamos un alfa para cada paso de interación usando interpolación cuadrática
     for i in range(maxiter):
-        alfa = 1
-        H = alfa * g 
+        alfa_min = 1
+        #H = alfa_min * g 
 
         a = 0
-        fa= f(x+a*H)
+        fa= f(x+a*g)
         b = 1
-        fb= f(x+b*H)
+        fb= f(x+b*g)
         c = 1/2
-        fc= f(x+c*H)
+        fc= f(x+c*g)
 	    #(a,fa) - (c,fc) - (b,fb)	
-
+        k=1
         while 1 :
             if fa > fc:
                 #sigue "bajando"
                 if fc > fb:
                     c, fc  = b, fb
                     b *= 2
-                    fb = f(x+b*H)
+                    fb = f(x+b*g)
                 else:
                     break
             else: 
                 #está aumentando
                 b, fb  = c, fc
                 c  /= 2
-                fc = f(x+c*H)
+                fc = f(x+c*g)
             
             #si el intervalo es demasiado chico o demasiado grande, comencemos nuevamente...
             if (b < 1e-6) or (b > 1e6) :
-                alfa = alfa + 1
-                if alfa == 100 :
+                k = k + 1
+                if k == 100 :
                     break
                 b = np.random.rand(1)
                 c /= 2
         
         # Si después de muchas iteraciones, no llegamos a nada, devuelvo algo al azar entre 0 y 1.
-        if alfa == 100 :
-            alfa_min = np.random.rand(1)
+        if k == 100 :
+            x_n = x
         else:
             alfa_min = c*((4*fc-fb-3*fa)/(4*fc-2*fb-2*fa))
-        
-        x_n = x + alfa_min*g
+            x_n = x + alfa_min*g
+
         if(np.linalg.norm(x_n-x)<tol):
             break
         x = x_n
@@ -92,8 +92,8 @@ def grad(coef):
     return df
 
 def temperatura():
-    xo=np.array([36.16,-0.6,1.0,24.00,24.00])
-    tol=1e-15; max_it=10000
+    xo=np.array([36.00,-0.6,1.0,24.00,24.00])
+    tol=1e-15; max_it=1000
     x = minimi(f, grad, xo, tol, max_it)
     error = f_aux(x) # Error local
     return x, error    
@@ -101,7 +101,7 @@ def temperatura():
 # ------------------------------------------------------------------------------
 # TEST
 # ------------------------------------------------------------------------------
-def test():
+def temp_test():
     #Evaluamos la función temperatura
     x, error=temperatura()
     print("Coef obtenidos ([a,b,c,T1,T2]): \n", x)
@@ -116,4 +116,23 @@ def test():
     plt.xlim(0, 250)
     plt.legend()
     plt.show()
-    return 0
+    return
+
+esfera = lambda x: x[0]**2+x[1]**2+x[2]**2
+gradesfera = lambda x: np.array([2*x[0], 2*x[1], 2*x[2]])
+
+def test():
+    tol=1e-15; max_it=1000
+    
+    print("Funciones de prueba para minimi:\n")
+    print("Función esférica: \n")
+    x0esf=np.array([-47.5,20,-12.6])
+    x1=minimi(esfera, gradesfera, x0esf, tol, max_it)
+    print("El mínimo real es: [0,0,0] mientras que el mínimo calculado por minimi con x0=", x0esf, "es: ", x1)
+    print("\nLa norma de la diferencia entre el mínimo real y el cálculado es: ", np.linalg.norm(np.zeros(3)-x1))
+        
+    print("\n\n")
+    
+    print("Evaluación de la funcion de temperatura: \n")
+    temp_test()
+    return
