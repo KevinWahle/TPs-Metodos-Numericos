@@ -144,5 +144,3 @@ def test():
     print("Evaluación de la funcion de temperatura: \n")
     temp_test()
     return
-
-test()
